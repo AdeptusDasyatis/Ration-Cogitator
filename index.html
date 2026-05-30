@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ration Cogitator - Adeptus Mechanicus Calorie Codex</title>
+  
+  <!-- PWA Manifest & Theme Color -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d0c0b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  
+  <!-- Google Fonts: Cinzel for Gothic Headings, Share Tech Mono for CRT Terminal details -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Scanlines CRT screen overlay -->
+  <div class="crt-scanlines"></div>
+  <div class="crt-glow"></div>
+
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="logo-icon">⚙️💀⚙️</span>
+        <h1>Ration Cogitator</h1>
+      </div>
+      <button id="settings-toggle-btn" class="icon-btn" aria-label="Calibrate Cogitator">⚙️</button>
+    </header>
+
+    <main class="app-main">
+      <!-- Dashboard Section: Circular Progress and Stats -->
+      <section class="dashboard-card card glass">
+        <!-- Gothic frame corners -->
+        <div class="corner-bracket top-left"></div>
+        <div class="corner-bracket top-right"></div>
+        <div class="corner-bracket bottom-left"></div>
+        <div class="corner-bracket bottom-right"></div>
+
+        <div class="progress-ring-container">
+          <svg class="progress-ring" width="220" height="220">
+            <!-- Targeting reticle/dial look -->
+            <circle class="progress-ring-bg" stroke="rgba(197, 160, 89, 0.08)" stroke-dasharray="10, 5" stroke-width="12" fill="transparent" r="90" cx="110" cy="110"/>
+            <circle id="progress-ring-fill" class="progress-ring-fill" stroke="url(#progress-gradient)" stroke-width="12" stroke-linecap="butt" fill="transparent" r="90" cx="110" cy="110"/>
+            
+            <!-- Mechanical markings -->
+            <line x1="110" y1="5" x2="110" y2="20" stroke="var(--color-gold)" stroke-width="2" />
+            <line x1="110" y1="200" x2="110" y2="215" stroke="var(--color-gold)" stroke-width="2" />
+            <line x1="5" y1="110" x2="20" y2="110" stroke="var(--color-gold)" stroke-width="2" />
+            <line x1="200" y1="110" x2="215" y2="110" stroke="var(--color-gold)" stroke-width="2" />
+
+            <defs>
+              <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#b91c1c" /> <!-- Mechanicus Red -->
+                <stop offset="100%" stop-color="#d4af37" /> <!-- Imperium Gold -->
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="progress-text">
+            <span id="consumed-calories-display" class="calories-number">0</span>
+            <span class="calories-label">OF <span id="target-calories-display">1600</span> KCAL</span>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-title">REMAINING QUOTA</span>
+            <span id="remaining-calories-display" class="stat-value text-green">1600</span>
+          </div>
+          <div class="stat-item divider"></div>
+          <div class="stat-item">
+            <span class="stat-title">SYSTEM PURITY</span>
+            <span id="calorie-status-display" class="stat-value text-gold">OPERATIONAL</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Logging Section: Quick log buttons and Custom Entry -->
+      <section class="logging-card card glass">
+        <div class="corner-bracket top-left"></div>
+        <div class="corner-bracket top-right"></div>
+        <div class="corner-bracket bottom-left"></div>
+        <div class="corner-bracket bottom-right"></div>
+
+        <h2>Fuel Allocation (+)</h2>
+        <div class="quick-add-grid">
+          <button id="quick-add-1" class="btn quick-btn" data-value="1">
+            <span class="quick-icon">1</span>
+            <span class="quick-label">+ ALLOCATE</span>
+          </button>
+          <button id="quick-add-10" class="btn quick-btn" data-value="10">
+            <span class="quick-icon">10</span>
+            <span class="quick-label">+ ALLOCATE</span>
+          </button>
+          <button id="quick-add-100" class="btn quick-btn" data-value="100">
+            <span class="quick-icon">100</span>
+            <span class="quick-label">+ ALLOCATE</span>
+          </button>
+        </div>
+
+        <h2 class="section-divider">Fuel Extraction (-)</h2>
+        <div class="quick-add-grid">
+          <button id="quick-sub-1" class="btn quick-btn btn-sub" data-value="1">
+            <span class="quick-icon">1</span>
+            <span class="quick-label">- PURGE</span>
+          </button>
+          <button id="quick-sub-10" class="btn quick-btn btn-sub" data-value="10">
+            <span class="quick-icon">10</span>
+            <span class="quick-label">- PURGE</span>
+          </button>
+          <button id="quick-sub-100" class="btn quick-btn btn-sub" data-value="100">
+            <span class="quick-icon">100</span>
+            <span class="quick-label">- PURGE</span>
+          </button>
+        </div>
+
+        <h2 class="section-divider">Quota Calibration</h2>
+        <form id="calorie-adj-form" class="log-form">
+          <div class="input-group row-group">
+            <input type="number" id="calories-amount-input" placeholder="Amount (kcal)" min="1" max="10000" required>
+            <div class="action-buttons">
+              <button type="button" id="adj-add-btn" class="btn btn-primary">Allocate</button>
+              <button type="button" id="adj-sub-btn" class="btn btn-secondary">Purge</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- History Section (List of Daily Totals) -->
+      <section class="history-card card glass">
+        <div class="corner-bracket top-left"></div>
+        <div class="corner-bracket top-right"></div>
+        <div class="corner-bracket bottom-left"></div>
+        <div class="corner-bracket bottom-right"></div>
+
+        <div class="section-header-row">
+          <h2>Archive of Consumption</h2>
+          <span id="log-count" class="badge">0 LOGS</span>
+        </div>
+        <div id="empty-history-message" class="empty-state">
+          Archive empty. Begin logging ration allocations.
+        </div>
+        <ul id="history-list" class="history-list">
+          <!-- Items injected here by JS -->
+        </ul>
+      </section>
+
+      <!-- Chart / Trends Section -->
+      <section class="trends-card card glass">
+        <div class="corner-bracket top-left"></div>
+        <div class="corner-bracket top-right"></div>
+        <div class="corner-bracket bottom-left"></div>
+        <div class="corner-bracket bottom-right"></div>
+
+        <h2>Weekly Ration Chronicle</h2>
+        <div class="chart-container">
+          <svg id="weekly-chart" viewBox="0 0 350 160" preserveAspectRatio="none">
+            <!-- Grid lines -->
+            <line x1="40" y1="20" x2="330" y2="20" stroke="rgba(197, 160, 89, 0.1)" stroke-dasharray="4,4" />
+            <line x1="40" y1="70" x2="330" y2="70" stroke="rgba(197, 160, 89, 0.1)" stroke-dasharray="4,4" />
+            <line x1="40" y1="120" x2="330" y2="120" stroke="rgba(197, 160, 89, 0.2)" />
+            
+            <!-- Bars and text injected by JS -->
+          </svg>
+        </div>
+      </section>
+
+      <!-- Sync / OneDrive Operations Section -->
+      <section class="sync-card card glass">
+        <div class="corner-bracket top-left"></div>
+        <div class="corner-bracket top-right"></div>
+        <div class="corner-bracket bottom-left"></div>
+        <div class="corner-bracket bottom-right"></div>
+
+        <h2>Adeptus Syncronis</h2>
+        <p class="sync-description">
+          Transmit ration archives to your OneDrive dataslate to secure log files or analyze via Excel codex.
+        </p>
+        
+        <div class="sync-actions-grid">
+          <button id="export-csv-btn" class="btn btn-secondary btn-icon">
+            <span>📊</span> Transmit CSV Codex
+          </button>
+          <button id="export-json-btn" class="btn btn-secondary btn-icon">
+            <span>⚙️</span> Backup Cogitator Log
+          </button>
+        </div>
+
+        <div class="import-section">
+          <h3>Restore Dataslate Logs</h3>
+          <div class="file-drop-area">
+            <input type="file" id="import-file-input" accept=".csv,.json">
+            <label for="import-file-input" id="file-input-label">
+              <span>📁</span> LOAD COGITATOR LOG FILE
+            </label>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay hidden">
+      <div class="modal-content glass">
+        <div class="corner-bracket top-left"></div>
+        <div class="corner-bracket top-right"></div>
+        <div class="corner-bracket bottom-left"></div>
+        <div class="corner-bracket bottom-right"></div>
+
+        <div class="modal-header">
+          <h2>Cogitator Calibration</h2>
+          <button id="settings-close-btn" class="icon-btn" aria-label="Close">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="input-field">
+            <label for="settings-goal-input">Daily Ration Target (kcal)</label>
+            <input type="number" id="settings-goal-input" min="500" max="10000" value="1600">
+          </div>
+          <div class="settings-actions">
+            <button id="save-settings-btn" class="btn btn-primary">Confirm Calibration</button>
+          </div>
+          <hr class="modal-divider">
+          <div class="danger-zone">
+            <h3>Heresy Zone</h3>
+            <p>Wipe all ration logs from this machine. Ensure backup codex is secured.</p>
+            <button id="clear-data-btn" class="btn btn-danger">Initiate Data Purge</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer">
+      <p>Ration Cogitator v1.0.3 • Adeptus Mechanicus Dataslate</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
