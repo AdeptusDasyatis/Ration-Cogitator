@@ -1,4 +1,4 @@
-// Fuel Calorie Counter - Application Logic
+// Ration Cogitator - Application Logic
 
 (function () {
   // State variables
@@ -65,15 +65,15 @@
     });
   }
 
-  // Load state from local storage
+  // Load state from local storage with fallback to legacy keys
   function loadState() {
-    const savedGoal = localStorage.getItem('fuel_target_calories');
+    const savedGoal = localStorage.getItem('ration_target_calories') || localStorage.getItem('fuel_target_calories');
     if (savedGoal) {
       targetCalories = parseInt(savedGoal, 10);
       settingsGoalInput.value = targetCalories;
     }
 
-    const savedData = localStorage.getItem('fuel_daily_data');
+    const savedData = localStorage.getItem('ration_daily_data') || localStorage.getItem('fuel_daily_data');
     if (savedData) {
       try {
         dailyData = JSON.parse(savedData);
@@ -86,8 +86,8 @@
 
   // Save state to local storage
   function saveState() {
-    localStorage.setItem('fuel_target_calories', targetCalories);
-    localStorage.setItem('fuel_daily_data', JSON.stringify(dailyData));
+    localStorage.setItem('ration_target_calories', targetCalories);
+    localStorage.setItem('ration_daily_data', JSON.stringify(dailyData));
   }
 
   // Modify today's calories by a delta
@@ -298,7 +298,7 @@
     const link = document.createElement('a');
     
     link.setAttribute('href', url);
-    link.setAttribute('download', `fuel_calories_${getLocalDateString()}.csv`);
+    link.setAttribute('download', `ration_cogitator_${getLocalDateString()}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -308,7 +308,7 @@
   // Export JSON Backup
   function exportJSON() {
     const backupObj = {
-      app: 'Fuel Calorie Counter',
+      app: 'Ration Cogitator',
       version: '1.0',
       exportedAt: new Date().toISOString(),
       targetCalories: targetCalories,
@@ -320,7 +320,7 @@
     const link = document.createElement('a');
     
     link.setAttribute('href', url);
-    link.setAttribute('download', `fuel_backup_${getLocalDateString()}.json`);
+    link.setAttribute('download', `ration_backup_${getLocalDateString()}.json`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();

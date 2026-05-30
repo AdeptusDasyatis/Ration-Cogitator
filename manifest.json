@@ -1,6 +1,6 @@
 {
-  "name": "Fuel Calorie Counter",
-  "short_name": "Fuel",
+  "name": "Ration Cogitator",
+  "short_name": "Ration",
   "description": "Premium offline calorie tracker syncing directly to OneDrive.",
   "start_url": "./index.html",
   "display": "standalone",
