@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ration-cogitator-v1';
+const CACHE_NAME = 'ration-cogitator-v2';
 const ASSETS = [
   './',
   './index.html',

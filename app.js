@@ -403,16 +403,6 @@
 
   // Bind Event Listeners
   function bindEvents() {
-    // Quick Add Buttons (+1, +10, +100)
-    document.getElementById('quick-add-1').addEventListener('click', () => adjustTodayCalories(1));
-    document.getElementById('quick-add-10').addEventListener('click', () => adjustTodayCalories(10));
-    document.getElementById('quick-add-100').addEventListener('click', () => adjustTodayCalories(100));
-
-    // Quick Subtract Buttons (-1, -10, -100)
-    document.getElementById('quick-sub-1').addEventListener('click', () => adjustTodayCalories(-1));
-    document.getElementById('quick-sub-10').addEventListener('click', () => adjustTodayCalories(-10));
-    document.getElementById('quick-sub-100').addEventListener('click', () => adjustTodayCalories(-100));
-
     // Custom Form Adjustments
     adjAddBtn.addEventListener('click', () => {
       const val = parseInt(calorieAmountInput.value, 10);

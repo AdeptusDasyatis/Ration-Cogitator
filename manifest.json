@@ -1,7 +1,7 @@
 {
   "name": "Ration Cogitator",
   "short_name": "Ration",
-  "description": "Premium offline calorie tracker syncing directly to OneDrive.",
+  "description": "Offline calorie tracker.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#090a0f",
