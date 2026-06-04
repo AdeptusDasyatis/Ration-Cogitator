@@ -1,7 +1,11 @@
 {
   "name": "Ration Cogitator",
   "short_name": "Ration",
+<<<<<<< HEAD
   "description": "Offline calorie tracker.",
+=======
+  "description": "Simple calorie tracker.",
+>>>>>>> 3ffd4946d14d18a4a9d8a3e5e16aa0d3a94b5c09
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#090a0f",
